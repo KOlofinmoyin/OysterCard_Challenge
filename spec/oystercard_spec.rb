@@ -27,6 +27,10 @@ describe Oystercard do
         expect { subject.deduct 3}.to change { subject.balance }.by -3
       end
     end
+
+    it "raises an error when you touch in with less than £1 balance." do
+      expect { subject.touch_in}.to raise_error("Below £#{Oystercard::MINIMUM_BALANCE}.")
+    end
     end
   end
 
@@ -36,11 +40,13 @@ describe Oystercard do
     end
 
     it 'can touch in' do
+      subject.top_up(20)
       subject.touch_in
       expect(subject).to be_in_journey
     end
 
     it 'can touch out' do
+      subject.top_up(20)
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey

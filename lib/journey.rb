@@ -1,6 +1,12 @@
 
 class Journey
+  attr_reader :entry_station
+
 PENALTY_FARE = 6
+
+  def initialize(entry_station: nil)
+    @entry_station = entry_station
+  end
 
   def complete?
     @complete
@@ -13,5 +19,5 @@ PENALTY_FARE = 6
   def finish(station)
     self
   end
-  
+
 end

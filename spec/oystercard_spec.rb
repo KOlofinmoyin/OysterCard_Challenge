@@ -5,7 +5,7 @@ describe Oystercard do
   let(:station) { double :station }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
-
+  let(:journey) { { entry_station: entry_station, exit_station: exit_station} }
 
   context "balance on card" do
     it 'has a balance of zero' do
@@ -41,10 +41,7 @@ describe Oystercard do
     end
   end
 
-  context "is card in use" do
-    it 'is initially not in a journey' do
-      expect(subject).to_not be_in_journey
-    end
+  context "card is in a journey" do
 
     it 'can touch in' do
       subject.top_up(20)
@@ -52,18 +49,37 @@ describe Oystercard do
       expect(subject).to be_in_journey
     end
 
+  end
+
+  context "card is not in a journey" do
+
+    it "has an empty list of journeys by default" do
+      expect(subject.journeys).to be_empty
+    end
+
+    it 'is initially not in a journey' do
+      expect(subject).to_not be_in_journey
+    end
+
     it 'can touch out' do
       subject.touch_out(exit_station)
       expect(subject).not_to be_in_journey
     end
 
-  end
+    it "stores exit station" do
+      subject.top_up(20)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.exit_station).to eq exit_station
+    end
 
-  it "stores exit station" do
-    subject.top_up(20)
-    subject.touch_in(entry_station)
-    subject.touch_out(exit_station)
-    expect(subject.exit_station).to eq exit_station
+    it "stores a journey" do
+      subject.top_up(20)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys.count).to eq 1
+    end
+
   end
 
 end

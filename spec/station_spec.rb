@@ -8,7 +8,7 @@ describe Station do
   end
 
   it "has a zone" do
-    expect(station.zone).to eq 1
+    expect(station.zone).to eq(1)
   end
 
 end
